@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Atelier AR Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F4EFE6;
+      --warm-white: #FBF8F3;
+      --sand: #E7D8C8;
+      --charcoal: #2B2522;
+      --ink: #3B322B;
+      --muted: #8D8277;
+      --accent: #C0623A;
+      --accent-light: #E07B53;
+      --gold: #C9A46A;
+      --border: #DDD0C3;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--charcoal);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: white;
+    }
+
+    .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.08em;
+      color: var(--charcoal);
+      line-height: 1;
+    }
+
+    .logo-text span {
+      color: var(--accent);
+    }
+
+    .header-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--charcoal);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .header-badge i { color: var(--accent-light); font-size: 0.85rem; }
+
+    /* ─── HERO STRIP ─── */
+    .hero-strip {
+      background: linear-gradient(120deg, #2B2522 0%, #3A2E27 100%);
+      color: white;
+      padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-strip::before {
+      content: 'LIVING';
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(7rem, 22vw, 16rem);
+      position: absolute;
+      right: -2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.04);
+      letter-spacing: -0.02em;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 6rem);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      margin-bottom: 1.25rem;
+      max-width: 600px;
+    }
+
+    .hero-sub {
+      color: rgba(255,255,255,0.55);
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      font-weight: 300;
+      max-width: 440px;
+      line-height: 1.6;
+    }
+
+    /* ─── STATS ROW ─── */
+    .stats-row {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .stats-row::-webkit-scrollbar { display: none; }
+
+    .stat-item {
+      flex: 1;
+      min-width: 140px;
+      padding: 1.25rem clamp(1rem, 3vw, 2rem);
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ─── MAIN SECTION ─── */
+    main {
+      padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 4rem);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: 0.05em;
+      color: var(--charcoal);
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .counter-display {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    /* ─── CAROUSEL ─── */
+    .carousel-wrapper {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 40px rgba(0,0,0,0.08);
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    .bike-slide {
+      min-width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 420px;
+    }
+
+    @media (max-width: 680px) {
+      .bike-slide {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+    }
+
+    .slide-image-area {
+      background: var(--sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-image-area::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.06) 100%);
+    }
+
+    .slide-image-area img {
+      width: 100%;
+      max-width: 380px;
+      object-fit: contain;
+      border-radius: 12px;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.4s ease;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+    }
+
+    .bike-slide:hover .slide-image-area img {
+      transform: scale(1.03) translateY(-4px);
+    }
+
+    .slide-info {
+      padding: clamp(2rem, 4vw, 3rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(212, 69, 12, 0.1);
+      border: 1px solid rgba(212, 69, 12, 0.2);
+      padding: 4px 12px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+
+    .slide-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--charcoal);
+    }
+
+    .slide-desc {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    .slide-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .spec-item {}
+
+    .spec-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .spec-value {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-top: 2px;
+    }
+
+    .ar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--charcoal);
+      color: white;
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      transition: all 0.25s ease;
+      width: fit-content;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ar-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: translateX(-100%);
+      transition: transform 0.35s ease;
+    }
+
+    .ar-btn:hover::before { transform: translateX(0); }
+    .ar-btn span, .ar-btn i { position: relative; z-index: 1; }
+
+    .ar-btn i {
+      font-size: 1.1rem;
+      color: var(--accent-light);
+      transition: color 0.35s ease;
+    }
+
+    .ar-btn:hover i { color: white; }
+
+    /* ─── NAV CONTROLS ─── */
+    .carousel-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.75rem;
+      background: white;
+      border-top: 1px solid var(--border);
+    }
+
+    .nav-dots {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 100px;
+      background: var(--border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      width: 28px;
+    }
+
+    .nav-arrows {
+      display: flex;
+      gap: 10px;
+    }
+
+    .arrow-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--ink);
+      transition: all 0.2s ease;
+    }
+
+    .arrow-btn:hover {
+      background: var(--charcoal);
+      border-color: var(--charcoal);
+      color: white;
+    }
+
+    /* ─── BIKE GRID THUMBNAILS ─── */
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 480px) {
+      .thumb-grid { grid-template-columns: 1fr; }
+    }
+
+    .thumb-card {
+      background: var(--cream);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .thumb-card:hover, .thumb-card.active {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212, 69, 12, 0.12);
+    }
+
+    .thumb-img {
+      width: 72px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: var(--sand);
+      flex-shrink: 0;
+    }
+
+    .thumb-text {}
+
+    .thumb-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--charcoal);
+    }
+
+    .thumb-type {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.45);
+      padding: 2rem clamp(1.5rem, 5vw, 4rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.08em;
+      color: white;
+    }
+
+    .footer-logo span { color: var(--accent); }
+
+    footer p { font-size: 0.8rem; }
+
+    /* ─── KEYFRAME ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .carousel-wrapper { animation: fadeUp 0.5s ease both; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon"><i class="fas fa-couch"></i></div>
+      <div class="logo-text">ATELIER<span>AR</span></div>
+    </div>
+    <div class="header-badge">
+      <i class="fas fa-vr-cardboard"></i>
+      Furniture AR Studio
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero-strip">
+    <div class="hero-kicker">New · Atelier Collection</div>
+    <h1 class="hero-title">See Furniture In Your Space</h1>
+    <p class="hero-sub">Preview scale, materials, and placement in your room. Walk around it before you buy.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-number">3</div>
+      <div class="stat-label">AR Pieces</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">1:1</div>
+      <div class="stat-label">Real-Scale</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">360°</div>
+      <div class="stat-label">Walk Around</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">Free</div>
+      <div class="stat-label">No App Needed</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+    <div class="section-header">
+      <div class="section-title">Select Your <span>Piece</span></div>
+      <div class="counter-display" id="counterDisplay">01 / 05</div>
+    </div>
+
+    <!-- CAROUSEL -->
+    <div class="carousel-wrapper">
+      <div class="carousel-track" id="carousel">
+
+        <!-- FURNITURE 1 -->
+        <div class="bike-slide">
+          <div class="slide-image-area">
+            <img src="plastic-chair.jpg" alt="Milo Plastic Chair" onerror="this.src='https://placehold.co/400x240/E7D8C8/8D8277?text=Milo+Chair'"/>
+          </div>
+          <div class="slide-info">
+            <div class="slide-tag"><i class="fas fa-chair"></i> Dining</div>
+            <div class="slide-name">Milo Plastic Chair</div>
+            <p class="slide-desc">A lightweight, stackable chair with a smooth molded shell. Ideal for dining spaces, balconies, and quick refreshes.</p>
+            <div class="slide-specs">
+              <div class="spec-item">
+                <div class="spec-label">Material</div>
+                <div class="spec-value">Molded Plastic</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Size</div>
+                <div class="spec-value">45 × 52 × 82 cm</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Finish</div>
+                <div class="spec-value">Matte White</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Weight</div>
+                <div class="spec-value">3.4 kg</div>
+              </div>
+            </div>
+            <a href="https://mywebar.com/p/Project_2_e59fos23ej" target="_blank" class="ar-btn">
+              <i class="fas fa-vr-cardboard"></i>
+              <span>View in AR</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- FURNITURE 2 -->
+        <div class="bike-slide">
+          <div class="slide-image-area">
+            <img src="sofa.png" alt="Brea Modular Sofa" onerror="this.src='https://placehold.co/400x240/E7D8C8/8D8277?text=Brea+Sofa'"/>
+          </div>
+          <div class="slide-info">
+            <div class="slide-tag"><i class="fas fa-couch"></i> Living</div>
+            <div class="slide-name">Brea Modular Sofa</div>
+            <p class="slide-desc">Deep, adaptable seating with crisp lines. Configure it for compact spaces or stretch it into a lounge-ready layout.</p>
+            <div class="slide-specs">
+              <div class="spec-item">
+                <div class="spec-label">Seats</div>
+                <div class="spec-value">3</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Fabric</div>
+                <div class="spec-value">Linen Blend</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Width</div>
+                <div class="spec-value">220 cm</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Depth</div>
+                <div class="spec-value">96 cm</div>
+              </div>
+            </div>
+            <a href="https://mywebar.com/p/Project_4_dgir5kh9dg" target="_blank" class="ar-btn">
+              <i class="fas fa-vr-cardboard"></i>
+              <span>View in AR</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- FURNITURE 3 -->
+        <div class="bike-slide">
+          <div class="slide-image-area">
+            <img src="table.jpg" alt="Arden Coffee Table" onerror="this.src='https://placehold.co/400x240/E7D8C8/8D8277?text=Arden+Table'"/>
+          </div>
+          <div class="slide-info">
+            <div class="slide-tag"><i class="fas fa-table"></i> Tables</div>
+            <div class="slide-name">Arden Coffee Table</div>
+            <p class="slide-desc">A grounded, low-profile table with a warm oak top and slim metal frame. Keeps the room open while anchoring the seating.</p>
+            <div class="slide-specs">
+              <div class="spec-item">
+                <div class="spec-label">Length</div>
+                <div class="spec-value">110 cm</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Width</div>
+                <div class="spec-value">60 cm</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Top</div>
+                <div class="spec-value">Oak Veneer</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Height</div>
+                <div class="spec-value">40 cm</div>
+              </div>
+            </div>
+            <a href="https://mywebar.com/p/Project_2_jpbc4s21w4" target="_blank" class="ar-btn">
+              <i class="fas fa-vr-cardboard"></i>
+              <span>View in AR</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- FURNITURE 4 -->
+        <div class="bike-slide">
+          <div class="slide-image-area">
+            <img src="wardrobe.jpg" alt="Wardrobe" onerror="this.src='https://placehold.co/400x240/E7D8C8/8D8277?text=Wardrobe'"/>
+          </div>
+          <div class="slide-info">
+            <div class="slide-tag"><i class="fas fa-box-open"></i> Storage</div>
+            <div class="slide-name">Wardrobe</div>
+            <p class="slide-desc">A clean, vertical storage piece for bedrooms or entryways. Keeps everyday essentials organized without overwhelming the room.</p>
+            <div class="slide-specs">
+              <div class="spec-item">
+                <div class="spec-label">Material</div>
+                <div class="spec-value">Wood</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Finish</div>
+                <div class="spec-value">Natural</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Size</div>
+                <div class="spec-value">180 × 90 × 55 cm</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Doors</div>
+                <div class="spec-value">2</div>
+              </div>
+            </div>
+            <a href="https://mywebar.com/p/Project_0_qex619qe9o" target="_blank" class="ar-btn">
+              <i class="fas fa-vr-cardboard"></i>
+              <span>View in AR</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- FURNITURE 5 -->
+        <div class="bike-slide">
+          <div class="slide-image-area">
+            <img src="bed.jpeg" alt="Bed" onerror="this.src='https://placehold.co/400x240/E7D8C8/8D8277?text=Bed'"/>
+          </div>
+          <div class="slide-info">
+            <div class="slide-tag"><i class="fas fa-bed"></i> Bedroom</div>
+            <div class="slide-name">Bed</div>
+            <p class="slide-desc">A clean, comfortable bed designed for calm, airy rooms. Balanced proportions and a warm wood frame.</p>
+            <div class="slide-specs">
+              <div class="spec-item">
+                <div class="spec-label">Material</div>
+                <div class="spec-value">Wood</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Finish</div>
+                <div class="spec-value">Natural</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Size</div>
+                <div class="spec-value">200 × 160 × 100 cm</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Type</div>
+                <div class="spec-value">Queen</div>
+              </div>
+            </div>
+            <a href="https://mywebar.com/p/Project_0_ouqvz9qc1p" target="_blank" class="ar-btn">
+              <i class="fas fa-vr-cardboard"></i>
+              <span>View in AR</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- NAV -->
+      <div class="carousel-nav">
+        <div class="nav-dots">
+          <button class="dot active" onclick="goTo(0)"></button>
+          <button class="dot" onclick="goTo(1)"></button>
+          <button class="dot" onclick="goTo(2)"></button>
+          <button class="dot" onclick="goTo(3)"></button>
+          <button class="dot" onclick="goTo(4)"></button>
+        </div>
+        <div class="nav-arrows">
+          <button class="arrow-btn" onclick="move(-1)" aria-label="Previous">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="arrow-btn" onclick="move(1)" aria-label="Next">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- THUMB GRID -->
+    <div class="thumb-grid">
+          <div class="thumb-card active" onclick="goTo(0)" id="thumb-0">
+            <img class="thumb-img" src="plastic-chair.jpg" alt="Milo Plastic Chair" onerror="this.src='https://placehold.co/72x50/E7D8C8/8D8277?text=Milo'"/>
+            <div class="thumb-text">
+              <div class="thumb-name">Milo Plastic Chair</div>
+              <div class="thumb-type">Dining · Plastic</div>
+            </div>
+          </div>
+          <div class="thumb-card" onclick="goTo(1)" id="thumb-1">
+            <img class="thumb-img" src="sofa.png" alt="Brea Modular Sofa" onerror="this.src='https://placehold.co/72x50/E7D8C8/8D8277?text=Brea'"/>
+        <div class="thumb-text">
+          <div class="thumb-name">Brea Modular Sofa</div>
+          <div class="thumb-type">Living · Linen</div>
+        </div>
+      </div>
+      <div class="thumb-card" onclick="goTo(2)" id="thumb-2">
+        <img class="thumb-img" src="table.jpg" alt="Arden Coffee Table" onerror="this.src='https://placehold.co/72x50/E7D8C8/8D8277?text=Arden'"/>
+        <div class="thumb-text">
+          <div class="thumb-name">Arden Coffee Table</div>
+          <div class="thumb-type">Table · Oak</div>
+        </div>
+      </div>
+      <div class="thumb-card" onclick="goTo(3)" id="thumb-3">
+        <img class="thumb-img" src="wardrobe.jpg" alt="Wardrobe" onerror="this.src='https://placehold.co/72x50/E7D8C8/8D8277?text=Wardrobe'"/>
+        <div class="thumb-text">
+          <div class="thumb-name">Wardrobe</div>
+          <div class="thumb-type">Storage · Wood</div>
+        </div>
+      </div>
+      <div class="thumb-card" onclick="goTo(4)" id="thumb-4">
+        <img class="thumb-img" src="bed.jpeg" alt="Bed" onerror="this.src='https://placehold.co/72x50/E7D8C8/8D8277?text=Bed'"/>
+        <div class="thumb-text">
+          <div class="thumb-name">Bed</div>
+          <div class="thumb-type">Bedroom · Wood</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">ATELIER<span>AR</span></div>
+    <p>© 2026 Atelier AR Studio. All rights reserved.</p>
+    <p>Powered by MyWebAR</p>
+  </footer>
+
+  <script>
+    let current = 0;
+    const total = 5;
+
+    function update() {
+      document.getElementById('carousel').style.transform = `translateX(-${current * 100}%)`;
+      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+      document.querySelectorAll('.thumb-card').forEach((t, i) => t.classList.toggle('active', i === current));
+      document.getElementById('counterDisplay').textContent =
+        `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+    }
+
+    function move(dir) {
+      current = (current + dir + total) % total;
+      update();
+    }
+
+    function goTo(idx) {
+      current = idx;
+      update();
+    }
+
+    // Swipe support
+    let startX = 0;
+    const track = document.getElementById('carousel');
+    track.addEventListener('touchstart', e => startX = e.touches[0].clientX, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) move(diff > 0 ? 1 : -1);
+    }, { passive: true });
+  </script>
+</body>
+</html>
